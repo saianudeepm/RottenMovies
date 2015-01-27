@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MovieListController.h
 //  RottenMovies
 //
 //  Created by Sai Anudeep Machavarapu on 1/24/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MovieListController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end
-

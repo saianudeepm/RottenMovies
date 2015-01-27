@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MovieListController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    //initialize the apps window
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
+    //initialize movielist controller
+    MovieListController *mc = [[MovieListController alloc] init];
+    //intialize the navigational controller (this is the top bar which lets u navigate back to previous screen ~ actionbar)
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:mc];
+    //set the windows rootview controller
+    self.window.rootViewController = nvc;
+    self.window.backgroundColor = [UIColor whiteColor];
+    //make the window visible
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
