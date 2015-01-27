@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D6A982F0-AD2F-4305-A781-3B7B52E8DECF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>RottenMovies</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>B4619F5CFADA8D1B3B79C5E7B9939C4FB0864CD8</key>
+		<string>https://github.com/saianudeepm/RottenMovies.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>RottenMovies.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>B4619F5CFADA8D1B3B79C5E7B9939C4FB0864CD8</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/saianudeepm/RottenMovies.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>B4619F5CFADA8D1B3B79C5E7B9939C4FB0864CD8</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B4619F5CFADA8D1B3B79C5E7B9939C4FB0864CD8</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RottenMovies</string>
+		</dict>
+	</array>
+</dict>
+</plist>

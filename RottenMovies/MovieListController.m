@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic,strong) NSArray *movieList;
 @property (nonatomic,strong) NSString *currentSelection;
+@property (weak, nonatomic) IBOutlet UILabel *networkErrorLabel;
 
 -(void) loadMoviesinfo: (NSString *) type;
 @end
@@ -40,16 +41,14 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+
     
     //Register the movie cell nib
-    UINib *movieCellNib = [UINib nibWithNibName:@"MovieCell" bundle:nil];
-    UINib *errorCellNib = [UINib nibWithNibName:@"ErrorBarCell" bundle:nil];
-    [[self tableView] registerNib:movieCellNib forCellReuseIdentifier:@"MovieCell"];
-    [[self tableView] registerNib:errorCellNib forCellReuseIdentifier:@"ErrorBarCell"];
+    UINib *nib = [UINib nibWithNibName:@"ErrorBarCell" bundle:nil];
+    [[self tableView] registerNib:nib forCellReuseIdentifier:@"ErrorBarCell"];
     
-    
-    
-
+     nib = [UINib nibWithNibName:@"MovieCell" bundle:nil];
+    [[self tableView] registerNib:nib forCellReuseIdentifier:@"MovieCell"];
 
     //load the movies list
     self.currentSelection = @"box_office";
@@ -57,7 +56,6 @@
     
     //styling
     self.tableView.rowHeight=90;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -76,10 +74,11 @@
     NSURLRequest *apiRequest  = [[NSURLRequest alloc] initWithURL:apiURL];
     
     [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if(connectionError)
-        {
+        if(connectionError) {
             self.movieList=nil;
+            NSLog(@"Reloading data into tableview");
             [self.tableView reloadData];
+            //[self.networkErrorLabel setHidden:NO];
             [SVProgressHUD dismiss];
         }
         
@@ -89,14 +88,12 @@
             NSArray *moviesArray = [apiResponse valueForKey:@"movies"];
             self.movieList = [Movie getMovieArray: moviesArray];
             [self.tableView reloadData];
-            NSLog(@"Loading data");
+            NSLog(@"Reloading data into tableview");
         }
-        
         
     }];
     
-
-}
+}//loadMoviesinfo
 
 /*
 #pragma mark - Navigation
@@ -117,17 +114,15 @@
     NSLog(@"total rows found is : %ld",self.movieList.count);
     if(self.movieList==nil)
         return 1;
-    return self.movieList.count;
-    
+    else
+        return self.movieList.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    MovieCell *movieCell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell" forIndexPath:indexPath];
-    //ErrorBarCell *errorBarCell = [tableView dequeueReusableCellWithIdentifier:@"ErrorBarCell" forIndexPath:indexPath];
+    NSLog(@"cellforRowAtIndexPath called for %ld",indexPath.row);
     
-    
-    NSLog(@"indexpath for row is: %ld",indexPath.row);
     if (self.movieList!=nil) {
+        MovieCell *movieCell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell" forIndexPath:indexPath];
         Movie *currentMovie = [self.movieList objectAtIndex:indexPath.row];
         movieCell.movieTitle.text = currentMovie.title;
         [movieCell.posterThumbnail setImageWithURL:currentMovie.thumbnailURL];
@@ -139,6 +134,7 @@
         //formatting the run time
         int hours= [currentMovie.runtime intValue] / 60;
         int minutes = [currentMovie.runtime intValue] % 60;
+        
         if(minutes!=0){
             movieCell.runtimeLabel.text = [NSString stringWithFormat:@"%dh %dm",hours,minutes];
         }
@@ -147,23 +143,28 @@
         }
         return movieCell;
     }
+    
     //return error bar cell if there is a network error
-    /*else{
+    else{
+        
+        ErrorBarCell *errorBarCell = [tableView dequeueReusableCellWithIdentifier:@"ErrorBarCell" forIndexPath:indexPath];
         return errorBarCell;
-    }*/
+    }
     /*To set accessory type - its just an indicator for user that theres more content on click*/
     //UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     //[movieCell setAccessoryType:accessoryType];
-    return movieCell;
 }
 
 // takes to movie detailed view
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    MovieDetailedViewController *mvc = [[MovieDetailedViewController alloc] init];
-    Movie *selectedMovie = [self.movieList objectAtIndex:indexPath.row];
-    [mvc setSelectedMovie:selectedMovie];
-    [self.navigationController pushViewController:mvc animated:YES];
+    // go to detailed page view on touch of cell only when no network error
+    if (self.movieList!=nil) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        MovieDetailedViewController *mvc = [[MovieDetailedViewController alloc] init];
+        Movie *selectedMovie = [self.movieList objectAtIndex:indexPath.row];
+        [mvc setSelectedMovie:selectedMovie];
+        [self.navigationController pushViewController:mvc animated:YES];
+    }
     
 }
 
